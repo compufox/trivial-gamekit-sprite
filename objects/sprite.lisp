@@ -4,6 +4,8 @@
 
 (defclass sprite ()
   ((tick :initform 0)
+   (state :initarg :state
+          :accessor state)
    (coordinates :initarg :coordinates
                 :initform (vec2 0 0)
                 :accessor coordinates)
@@ -31,8 +33,14 @@
                  :accessor frame-length)))
 
 (defun make-sprite (spritesheet &key (coordinates gamekit::+origin+) (render t) (rotation 0)
-                                  animate (frame-length 0) frames (scale (vec2 1 1)))
+                                  animate (frame-length 0) frames (scale (vec2 1 1)) state)
+  (when animate (assert (> frame-length 0) nil "length of frames cannot be 0"))
   (make-instance 'sprite :spritesheet spritesheet :frames frames :coordinates coordinates
                          :render render :rotation rotation :frame-length frame-length
-                         :animate animate :scale scale))
+                         :animate animate :scale scale :state state))
 
+(defmethod (setf state) :before (value (this sprite))
+  (assert (find value (frames this) :key #'car) nil "state not found for sprite"))
+
+(defmethod (setf state) :after (value (this sprite))
+  (setf (current-frame this) 0))
