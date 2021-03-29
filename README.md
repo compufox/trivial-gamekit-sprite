@@ -15,7 +15,7 @@ please see `example/main.lisp` for an example
 
 ---
 
-`(make-sprite spritesheet &key (coordinates gamekit::+origin+) (render t) (rotation 0) animate (frame-length 0) (scale (vec2 1 1)) frames)`
+`(make-sprite spritesheet &key (coordinates gamekit::+origin+) (render t) (rotation 0) animate (frame-length 0) (scale (vec2 1 1)) frames state flip-x flip-y)`
 
 creates and returns a sprite
 
@@ -32,6 +32,10 @@ RENDER whether or not to draw the sprite
 ANIMATE whether or not the sprite should animate (increments through FRAMES one by one)
 
 FRAME-LENGTH how long each frame should last when animating
+
+FLIP-H if non-nil flips sprite horizontally
+
+FLIP-V if non-nil flips sprite vertically
 
 ---
 
@@ -62,7 +66,7 @@ converts RADIANS to degrees
 accessors exported: 
 `coordinates` `rotation` `render` `animate`
 `spritesheet` `current-frame` `frame-length`
-`image` `scale`
+`image` `scale` `state` `flip-h` `flip-v`
 
 ## License
 
