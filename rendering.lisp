@@ -18,7 +18,7 @@
 (defmethod draw-sprite ((this sprite))
   (with-slots (coordinates rotation render
                spritesheet frames current-frame
-               scale state) this
+               scale state flip-h flip-v) this
     (when render
       (with-slots (image) spritesheet
         (gamekit:with-pushed-canvas ()
@@ -30,11 +30,17 @@
               (gamekit:translate-canvas (x coordinates) (y coordinates))
               (gamekit:rotate-canvas rotation))
             (gamekit:scale-canvas (x scale) (y scale))
-            (gamekit:draw-image (if (zerop rotation)
-                                    ;; this is so our coordinates are consistant
-                                    (gamekit:div coordinates scale)
-                                    gamekit::+origin+)
-                                image
-                                :origin origin
-                                :width (x size)
-                                :height (y size))))))))
+            (let ((draw-pos (gamekit:div coordinates scale)))
+              ;; this is so our coordinates are consistant
+              (when flip-h (setf (x draw-pos) (- (x draw-pos))))
+              (when flip-v (setf (y draw-pos) (- (y draw-pos))))
+              (gamekit:draw-image (if (zerop rotation)
+                                      
+                                      draw-pos           
+                                      gamekit::+origin+)
+                                  image
+                                  :origin origin
+                                  :mirror-x flip-h
+                                  :mirror-y flip-v
+                                  :width (x size)
+                                  :height (y size)))))))))

@@ -7,7 +7,7 @@
   (:export :make-sprite :make-spritesheet
            :coordinates :rotation :render :animate
            :spritesheet :current-frame :frame-length
-           :image :scale :state
+           :image :scale :state :flip-h :flip-v
            
            :deg->rad :rad->deg
            :draw-sprite :draw-sprites))

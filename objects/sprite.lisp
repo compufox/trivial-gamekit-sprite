@@ -17,6 +17,12 @@
    (render :initform t
            :initarg :render
            :accessor render)
+   (flip-h :initform nil
+           :initarg :flip-h
+           :accessor flip-h)
+   (flip-v :initform nil
+           :initarg :flip-v
+           :accessor flip-v)
    (animate :initform nil
             :initarg :animate
             :accessor animate)
@@ -33,13 +39,16 @@
                  :accessor frame-length)))
 
 (defun make-sprite (spritesheet &key (coordinates gamekit::+origin+) (render t) (rotation 0)
-                                  animate (frame-length 0) frames (scale (vec2 1 1)) state)
+                                  animate (frame-length 0) frames (scale (vec2 1 1)) state
+                                  flip-h flip-v)
   (when animate (assert (> frame-length 0) nil "length of frames cannot be 0"))
   (make-instance 'sprite :spritesheet spritesheet :frames frames :coordinates coordinates
                          :render render :rotation rotation :frame-length frame-length
-                         :animate animate :scale scale :state state))
+                         :animate animate :scale scale :state state :flip-h flip-h
+                         :flip-v flip-v))
 
 (defmethod (setf state) :before (value (this sprite))
+  ;; would be nice to have a restart available here
   (assert (find value (frames this) :key #'car) nil "state not found for sprite"))
 
 (defmethod (setf state) :after (value (this sprite))
